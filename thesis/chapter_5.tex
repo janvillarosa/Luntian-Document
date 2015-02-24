@@ -1,0 +1,757 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Filename    : chapter_5.tex 
+%
+%   Description : This file will contain your Design and Implementation Issues.
+%                 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstset{
+         basicstyle=\footnotesize\ttfamily, % Standardschrift
+         %numbers=left,               % Ort der Zeilennummern
+         numberstyle=\tiny,          % Stil der Zeilennummern
+         %stepnumber=2,               % Abstand zwischen den Zeilennummern
+         numbersep=5pt,              % Abstand der Nummern zum Text
+         tabsize=2,                  % Groesse von Tabs
+         extendedchars=true,         %
+         breaklines=true,            % Zeilen werden Umgebrochen
+         keywordstyle=\color{red},
+    		frame=b,         
+ %        keywordstyle=[1]\textbf,    % Stil der Keywords
+ %        keywordstyle=[2]\textbf,    %
+ %        keywordstyle=[3]\textbf,    %
+ %        keywordstyle=[4]\textbf,   \sqrt{\sqrt{}} %
+         stringstyle=\color{white}\ttfamily, % Farbe der String
+         showspaces=false,           % Leerzeichen anzeigen ?
+         showtabs=false,             % Tabs anzeigen ?
+         xleftmargin=17pt,
+         framexleftmargin=17pt,
+         framexrightmargin=5pt,
+         framexbottommargin=4pt,
+         %backgroundcolor=\color{lightgray},
+         showstringspaces=false      % Leerzeichen in Strings anzeigen ?        
+ }
+ 
+\Section{Design and Implementation Issues}
+\label{sec:designandimplementationissues}    %--note: labels help you with hyperlink editing (using your IDE)
+
+%This section presents the design and implementation of the main features and data structure of Note Assistant. It also includes a discussion of the major issues and approaches employed to resolve such issues during the development process. 
+
+\subsection{System Architecture}
+\label{sec:systemarchitecture}
+
+The Note Assistant application consists of five modules namely User Module, Notes Management Module, Note Assistant Module, Review Module, and Note Sharing Module. Each module has its own view to facilitate the functionalities discussed in Chapter 4.
+
+The User Module is designed to handle the users account information which will be used for the ownership of notebooks and notes. When the application is installed for the first time, registration will be required to input the necessary information about the user. The user can edit his personal information with the Settings Menu. The application is password protected so every action to be done will be secured and can only be accessed by the user. Once done with the registration, the user can navigate the Notes Management Module.
+
+The Notes Management Module is designed to be responsible for the organization of notebooks and notes in the system. The user can add and/or edit notebooks and it will be arranged in the shelf. The user can add pages in reference to the notebook currently used and can navigate through pages via a thumbnail view. When the user selects a notebook from the shelf, he will be directed to the Note Assistant Module and Review Module where he can take, make, and review notes. The user can share notebooks with the Sharing Tool and the Note Sharing Module will manage the notes being shared.
+
+The Note Assistant Module is designed to facilitate the taking down and making up of notes. Tools like Marker, Text, Sticky Note, and Media Annotation, Concept Mapping tools are available to allow the major functionalities to be done. Other tools like Highlighter, Ruler, Eraser, and Hand tools are also available to handle minor functionalities. Templates can be changed with the Note Templates tool. Cornell Notes can be achieved by changing the template to Cornell Notes. Cornell Notes is discussed in Chapter 3.1.2. Notes created are auto-saved in reference to the page it was written on and the notebook that is currently used.
+
+The Review Module is designed to support the reviewing process of the user. The notes of different users can be displayed or hidden with the integration tool. The user can view the visual revision history by clicking the play button. It can also be paused and stopped using the pause and stop button respectively. The user may rewind or forward the play by moving the seek bar to left or right. There is an option of playing the visual revision history in real time or without the idle times.
+
+The Note Sharing Module is designed to manage the notebooks to be shared to and from the user. Data is exported to an XML file. The XML file together with all other files used in the notebook is saved in to a compressed file. This will be shared to other user using the Bluetooth functionality of the tablet. Data will be imported to a device by extracting the received compressed file and parsing the XML file and place it to proper location.
+
+\subsection{Data Structure}
+\label{sec:datastructure}
+
+Note Assistant's data is structured depending on what data can be stored (e.g. a string representation of the file path to locate media notes, point coordinates of a handwritten note, and user's information.) These data are recorded to the device's local database. To visually understand the database structure of the system, an Entity-Relationship Diagram is shown in Figure \ref{fig:erd}.
+
+\begin{figure}[htbp!]
+   \centering      
+   \includegraphics[height=9cm, width=14cm]{DatabaseUML.eps} 
+   \caption{Entity-Relationship Diagram of Note Assistant}
+   \label{fig:erd}
+\end{figure}
+
+
+The database contains all the information in facilitating the taking, making, and reviewing of notes. It was structured considering the future data that can be stored for features still to be developed. Restructuring the database is a huge task; therefore leaving less tasks for future development.
+
+The \textit{User} Table contains the details of the owner of the device and other users of Note Assistant. A user has an identification key to easily reference it with its details. A password is required from the owner of the device for security reasons. The password is not shared across the different device. A user has a user name, a first name, a last name, and an email address as basic identification.
+
+The \textit{Notebook} Table contains all the information of all the notebooks. It contains identification keys to uniquely identify notebooks from one or more devices. It holds boolean values for notebooks that are trashed and are shareable to other users. It also has the reference of page or notebook/s recently accessed to display what page or notebook/s is recently used by the user.
+
+A notebook may have multiple pages and it is listed at the \textit{Page} table. This table contains the references of the relation of pages to other pages. It can be derived what page comes next to a specific page and what page is positioned before a specific page. These pages can be referenced with identification keys. These pages can be shared and trashed in the future 
+
+The notes are the most essential element in Note Assistant and all the notes are recorded in the \textit{Note} Table.  Note Assistant supports three major classifications of notes namely are text notes, media notes, and handwritten notes. It can further be categorized into its specific classification. A text note can either be a rich text or a sticky text note. A media note can be an image, an audio, or a video. Handwritten notes can be free-hand note, a line, or a highlight.
+
+In order to retrieve the different classification of notes properly, characteristics of each type of note must all be stored in the database. For text notes, these characteristics are the position, size, color, and contents. For media notes, position, size, and path of the file that it represents must be stored. For handwritten notes, individual points' position, size and color should also be stored. Initially, each type of note has its own table in the database but this was changed considering other system features that can be affected with the storage of data in the database. The three tables were reduced to just one table, which is the State Table, comprising all the elements the different types of notes may have. This means that a column in the table may not be necessary for a specific type of note. Each note can change its state as the user changes it and all these states are saved in the \textit{State} Table. Text notes can be in a different state with a different style. And these styles of each text note are stored in the \textit{Style} Table.
+
+	Specific issues on what information are to be stored, how it should be stored and retrieval of data values arose. Visual Revision History caused a major change in the database structure as this feature required notes to be arranged in order the fast way. Handwritten notes can be saved as an image of the whole page but it won't allow modification of these types of notes. Rather, the points of these handwritten notes are saved to accurately record the note. Also, this lightened the development of visual revision history as these points are already listed in sequence according to how it was written.
+
+The creation of the database underwent a number of iteration. As development moved on, issues concerning the data to be stored are continuously arising. Every functionality added required the database to be modified. A table has been removed. A number of tables are even dropped to just one. All the data have to be erased every time the database have to be changed. This structure has been simplified up to the recent application requirements.
+
+	The biggest issue encountered is the cursor where data is being stored after retrieving it from the database. The test device used is a HoneyComb version of the Android OS where specific functions for application development have already deprecated. The old implementation of database simply queries data from the database but it is restricted only for the use specific application. The issue was resolved using a \textit{ContentProvider} where different applications will be allowed to access the database of the Note Assistant. Applications should locate the database it is accessing and it has to be allowed by the primary application managing it.
+
+\subsection{User Interface Design}
+\label{sec:userinterfacedesign}
+
+Designing the user interface was a crucial part in Note Assistant's development as the interface must support the needed functionalities of the application. Natural User Interface design principles and Android's User Interface guidelines were considered.
+
+\subsubsection{Designing the Activities}
+\label{sec:designingtheactivities}
+
+An Activity, as defined in the official Android developer's site, is a class that takes care of creating a window for the user in which a user interface can be placed. Note Assistant uses three main activities, namely \textit{NotebooksActivity} \textit{NotesActivity} and \textit{SettingsActivity}. Each of Note Assistant's Activity uses a unique layout as each displays a different set of information. \textit{NotebooksActivity} is an activity wherein all notebook-related features can be performed. In the \textit{NotesActivity}, all note taking, making and reviewing of notes are done including page navigation within a particular notebook. \textit{SettingsActivity} is where the user can adjust the application's settings.
+
+\begin{flushleft}
+\textbf{5.3.1.1 \textit{NotebooksActivity}}
+\end{flushleft}
+
+\begin{raggedright}
+The \textit{NotebooksActivity} uses a layout that has two types of views where the user can choose from. The default one is the shelf view. The shelf view serves as a visual shelf where users can see the notebooks that are available and those that are trashed. This is implemented using a \textit{ShelfView}, a custom \textit{GridView}, and a \textit{NotebookCursorAdapter}, a custom \textit{SimpleCursorAdapter}, to populate the shelf with the notebooks from the database. This implementation is based from the codes of Romain Guy in developing Shelves\footnote[5]{http://code.google.com/p/shelves/}, an application that lets users manage a collection of books in a mobile device. An item in the \textit{ShelfView} reuses a part of a background image of a shelf and thus, creates a continuous illusion of a shelf. Reusing of images makes the application execute faster.
+\end{raggedright}
+
+The second type of view is called the notebooks list view. This is simply a view that lists all the notebooks without the Shelf interface. This uses a \textit{ListView} and a \textit{NotebookCursorAdapter} in order to fill the view with the list of notebook information retrieved from the database. 
+
+By default, the shelf view and list view only display the name of the notebook. The user may also choose to display the owner of the notebook by enabling the "Display Notebook Owner's Name" preference in the Settings.
+
+The \textit{NotebooksActivity}'s layout has an \textit{actionbar} that serves as the main menu. The \textit{actionbar} has action items which serve as the menu items. This implementation is used because according to the developer's site of Android, the Menu button will be deprecated beginning with Android 3.0. This implies that other Android devices will no longer have a menu button that's why it is smarter to use an action bar as it uses on-screen action items. This implementation will no longer depend on the device's menu button in order to make the menu visible. By default, the \textit{NotebooksActivity} has action items such as Add Notebook, Enable Select Mode, Change to List View, View Trashed Notebooks, and Settings. The menu is defined in an XML menu (Listing \ref{lst:actionbarshelfxml}) that is inflated in the \textit{NotebooksActivity} everytime the activity resumes. The menu is inflated in the Activity's \textit{onCreateOptionsMenu} function. 
+
+\begin{lstlisting}[frame=single, label=lst:actionbarshelfxml, caption=actionbar\_shelf.xml]
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+   <item android:id="@+id/menu_item_add"/>
+   <item android:id="@+id/menu_item_select"/>
+   <item android:id="@+id/menu_item_cancel"/>
+   <item android:id="@+id/menu_item_trash"/>
+   <item android:id="@+id/menu_item_share"
+   <item android:id="@+id/menu_item_recover"/>
+   <item android:id="@+id/menu_item_delete"/>
+   <item android:id="@+id/menu_item_view_as_shelf"/>
+   <item android:id="@+id/menu_item_view_as_list"/>
+   <item android:id="@+id/menu_item_import"/>
+   <item android:id="@+id/menu_item_view_all"/>
+   <item android:id="@+id/menu_item_view_trashed"/> 
+   <item android:id="@+id/menu_item_settings"/>
+</menu>
+\end{lstlisting}
+
+There are 13 action items in the actionbar but shown action items chance as the actionbar changes during runtime depending on two factors. These are the notebooks currently viewed and the select mode status. Currently viewed notebooks can be the Shelf notebooks or the Trashed notebooks. The visibility of action items are summarized in Table \ref{tab:visibilityofactionitems}. The dynamic update of menu items is done in the Activity's \textit{onCreateOptionsMenu} function Listing \ref{lst:oncreateoptionsmenu}.
+
+\begin{table}[ht]
+\centering
+\caption{Visibility of Action Items in relation to select mode status and currently viewed notebooks} \vspace{0.25em}
+\begin{tabular}{|p{1.8in}|>{\centering\arraybackslash}p{0.5in}|>{\centering\arraybackslash}p{0.5in}|>{\centering\arraybackslash}p{0.5in}|>{\centering\arraybackslash}p{0.5in}|} \hline
+%\multicolumn{2}{|c|}{\textbf{INTERNAL EVALUATION RESULTS}} \\
+%\hline
+\multirow{4}{*}{} & \multicolumn{4}{|c|}{Notebooks Currently Viewed} \\ \cline{2-5}
+ & \multicolumn{2}{|c|}{Shelf Notebooks} & \multicolumn{2}{|c|}{Trashed Notebooks} \\ \cline{2-5}
+ & \multicolumn{4}{|c|}{Select Mode} \\ \cline{2-5}
+ & true & false & true & false \\ \hline
+\centering Action Item & \multicolumn{4}{|c|}{Visible} \\ \hline
+Add Notebooks & true & true & true & true \\ \hline
+Enable Select Mode & false & true & false & true \\ \hline
+Cancel Select Mode & true & false & true & false \\ \hline
+Move To Trash & true & false & false & false \\ \hline
+Share & true & false & false & false \\ \hline
+Recover & false & false & true & false \\ \hline
+Delete & false & false & true & false \\ \hline
+View As Shelf & true & true & true & true \\ \hline
+View As List & true & true & true & true \\ \hline
+Check Import & true & true & true & true \\ \hline
+View Shelf Notebooks & false & false & true & true \\ \hline
+View Trashed Notebooks & true & true & false & false \\ \hline
+Settings & true & true & true & true \\ \hline
+\end{tabular}
+\label{tab:visibilityofactionitems}
+\end{table}
+
+\begin{lstlisting}[frame=single, label=lst:oncreateoptionsmenu, caption=Pseudocode of \textit{onCreateOptionsMenu} function]
+onCreateOptionsMenu(Menu menu) {
+
+   Inflate Menu in actionbar_shelf.xml
+
+   IF CURRENT MODE IS SELECT MODE
+      IF SHOWN NOTEBOOKS are TRASHED NOTEBOOKS THEN
+         hide Enable Select Mode, Trash Notebooks, Share Notebook action items
+		 show Cancel Select Mode, Restore Notebooks, and Delete Notebooks action items
+	  ELSE IF SHOWN NOTEBOOKS are SHELF NOTEBOOKS THEN 
+		 hide Select Mode, Restore Notebooks, and Delete Notebooks action items
+		 show Cancel Select Mode, Trash, and share action items
+	  END IF
+   ELSE
+	  Show select menu item
+	  Hide trash, share, cancel, recover and delete menu items
+}
+\end{lstlisting}
+
+
+
+Each action item has a corresponding function and this is handled by the \textit{onOptionsItemSelected} method of the Activity class. This function accepts the menu item being selected as its parameter. The corresponding function is called given the id of the menu item. Pseudocode of the \textit{onOptionsItemSelected} is shown in Listing \ref{lst:onoptionsitemselected}.
+
+\begin{lstlisting}[frame=single, label=lst:onoptionsitemselected, caption=\textit{onOptionsItemSelected} pseudocode]
+CASE Id OF
+   R.id.menu_item_add: Add Notebook
+   R.id.menu_item_select: Change to Select Mode
+   R.id.menu_item_cancel: Cancel Select Mode
+   R.id.menu_item_trash: Move Notebooks to Trash
+   R.id.menu_item_delete: Delete Notebooks
+   R.id.menu_item_recover: Recover Notebooks
+   R.id.menu_item_share: Share Notebooks
+   R.id.menu_item_import: Check for Imports
+   R.id.menu_item_view_as_list: Change View to List
+   R.id.menu_item_view_as_shelf: Change View to Shelf
+   R.id.menu_item_view_all: View All Notebooks
+   R.id.menu_item_view_trashed: View Trashed Notebooks
+   R.id.menu_item_settings: View SettingsActivity
+END CASE
+\end{lstlisting}
+
+A Contextual Menu is used for notebook specific options such as rename, share, delete, restore, and notebook settings. A Contextual Menu is a floating menu that pops up when a user presses a notebook for a longer period. It displays the title of the notebook in which action will be performed. This can be cancelled by pressing the back button. Just like the actionbar, it is defined in an xml menu (shown in Listing \ref{lst:notebookxml}) that is inflated everytime an item is long pressed. This is inflated in the \textit{onCreateContextMenu} function of the Activity. This is used by passing the \textit{ListView} or \textit{GridView} into the Activity's \textit{registerForContextMenu} function. Corresponding actions of the context menu items are coded in the Activity's \textit{onContextItemSelected} function (See Listing \ref{lst:oncontextitemselected}). 
+
+\begin{lstlisting}[frame=single, label=lst:notebookxml, caption=Codes of notebook.xml]
+<menu>
+   <item android:id="@+id/context_menu_item_rename"/>
+   <item android:id="@+id/context_menu_item_share"
+   <item android:id="@+id/context_menu_item_trash"/>
+   <item android:id="@+id/context_menu_item_settings"/>
+</menu>
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single, label=lst:oncontextitemselected, caption=\textit{onContextItemSelected} pseudocode]
+CASE Id OF
+   R.id.context_menu_item_rename: Setup Rename Notebook Dialog
+   R.id.context_menu_item_settings: Open Notebook Settings
+   R.id.context_menu_item_share: Share Notebook
+   R.id.context_menu_item_trash: Move Notebook to Trash
+END CASE 
+\end{lstlisting}
+
+To show some pop-up windows, an Android Dialog is used. This layout shows on top of the screen and can have a shadow effect to make it float. Android Dialogs are used in user registration, user login, renaming a notebook, and adding a new notebook.
+
+\pagebreak
+
+\begin{flushleft}
+\textbf{5.3.1.2 \textit{NotesActivity}}
+\end{flushleft}
+
+\begin{raggedright}
+The \textit{NotesActivity} is the Activity being used when the user decides to access a particular notebook. This has two main views, namely the Pages View and the Page View. 
+\end{raggedright}
+
+The Pages View is responsible for the Page navigation. It enables the user to see the pages of the notebook and select a page in order to access it. This is implemented by using a Custom \textit{GridView} and a \textit{PageCursorAdapter} to populate the \textit{GridView} with the thumbnails of each page of the notebook. Each page is also labeled with the page number using a TextView.
+
+When the user is viewing a page, one is viewing the Page View. The Page View is a layer of different views that enables the user to take, make and review notes. These layers are visually represented in Figure \ref{fig:pageviewlayers}. This is implemented using a \textit{RelativeLayout} with two main parts, the page and the toolbar on top of it. 
+
+\begin{figure}[htbp!]           
+   \centering          
+   \includegraphics[height=8cm, width=12cm]{PageViewLayers.eps} 
+   \caption{The Page View Layers}
+   \label{fig:pageviewlayers}
+\end{figure}
+
+The page has three main layers, the topmost layer, middle layer, and the bottom layer. These are all contained in a \textit{RelativeLayout} that holds all these layers. This \textit{RelativeLayout} is a child of a \textit{NonFocusingScrollView}, a custom \textit{ScrollView} that allows children views to gain focus when the user does not want to scroll the page.
+
+The topmost layer is composed of the Margins Layer that mostly handles the margins and top layer touches. The margins are line markings that divide a page. This is drawn on top of the notes in order to see the division clearly. It is significant when reviewing in a Cornell Note template as it is responsible in covering the main notes part. This is done by drawing a white rectangle on the view of the topmost layer. 
+
+Next to the topmost layer is the middle layer. This layer contains all the notes created by the user. It has sublayers in order to classify the different types of notes, namely, the note objects layer, the drawings layer, and the mappings layer. 
+
+The note objects layer contains all the text and media notes. This is implemented using Android's \textit{RelativeLayout}. Next to the note objects layer is the drawings layer. The drawings layer is composed of two \textit{DrawingViews}. A \textit{DrawingView} is a custom view that enables the user to create marking by using paths and paints on the canvas. The upper \textit{DrawingView} draws the temporary markings such as when a line follows the use's finger when the user is about to draw a line. The bottom drawing view contains all the handwritten notes of the user. The mappings layer contains all the note mappings. This uses the MappingView, a custom view that has similar characteristics with a \textit{DrawingView}. A \textit{Mappingview} draws arrows between mapped note objects.
+
+The bottom layer of the page basically serves as the templates layer. This is made up of a \textit{GraphView} and a \textit{RelativeLayout}. The Relative Layout displays the selected template that the user chose. The \textit{GraphView} is where a document's page is displayed when the user chooses to annotate a document.
+
+The toolbar on top of the page is displayed using a \textit{LinearLayout} to display the toolbar horizontally. It has three main parts which are, the mode area, the main tools area and the toolbar visibility button as shown in Figure \ref{fig:toolbar}. The mode area has two buttons which are the Review mode button and Make Notes mode. If the Review mode button is pressed, reviewing tools are displayed but when the Make Notes mode is pressed, note-making tools are displayed. Each tool is represented by an \textit{ImageButton} with a corresponding icon. The rightmost part of the toolbar is the toolbar visibility button which hides or shows the toolbar.
+
+\begin{figure}[htbp!]       
+   \centering              
+   \includegraphics[height=2cm, width=15cm]{PartsOfToolbar.eps} 
+   \caption{Parts of the toolbar}
+   \label{fig:toolbar}
+\end{figure}
+
+Just like in \textit{NotebooksActivity}, the \textit{NotesActivity} has an actionbar with the following actions: Add New Page, Delete Page, and Change View.
+
+\begin{flushleft}
+\textbf{5.3.1.3 \textit{SettingsActivity}}
+\end{flushleft}
+
+\begin{raggedright}
+The \textit{SettingsActivity} is a custom \textit{PreferenceActivity}, a base class that enables the user to view and modify a hierarchy of preferences. Its interface is defined in an XML (shown in Listing \ref{lst:preferencesxml}) where each preference, such as password and display owner's name, has a corresponding key string. 
+\end{raggedright}
+
+\begin{lstlisting}[frame=single, label=lst:preferencesxml, caption=Codes in preferences.xml]
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen >
+   <PreferenceCategory 
+      android:title="User Settings"
+      android:key="user_settings_category">
+      <EditTextPreference
+         android:key="edit_username"
+         android:title="Edit Username"/>
+      <EditTextPreference
+         android:key="edit_email"
+         android:title="Edit Email"/>
+      <com.noteassistant.dialog.DialogChangePassword
+         android:key="edit_password"
+         android:title="Edit Password"/>
+   </PreferenceCategory>
+   <PreferenceCategory 
+      android:title="Security"
+      android:key="security_category">
+      <CheckBoxPreference 
+         android:key="enable_password"
+         android:title="Enable Password"/>
+   </PreferenceCategory>
+   <PreferenceCategory 
+      android:title="Notebooks"
+      android:key="sharing_category">
+	  <CheckBoxPreference 
+         android:key="display_owner"
+         android:title="Display Notebook Owner's Name"/> 
+      <CheckBoxPreference 
+         android:key="notebooks_public"
+         android:title="Set Notebooks As Public By
+            Default"/>
+      <CheckBoxPreference 
+         android:key="notebooks_sharable"
+         android:title="Set Notebooks as Sharable By
+            Default"/>
+   </PreferenceCategory>
+</PreferenceScreen>
+\end{lstlisting}
+
+Preferences saved in the \textit{SettingsActivity} can be accessed by the other Activities through a \textit{SharedPreference} class. The functions \textit{getBoolean(key, defaultValue)} and \textit{getString(key, defaultValue)} of the \textit{SharedPreference} class are used to access values from the preferences where key is the key string for the preference.  The functions \textit{putBoolean(key, value)} and \textit{putString(key, value)} are used to modify the values in the preferences.
+
+The XML resource that defines the preferences is passed into the Activity's \textit{addPreferenceFromResource} function to display the settings.
+
+\subsubsection{Multiple Screens Support}
+\label{sec:multiplescreenssupport}
+
+One of the goals for the design is to support different Android tablets. But one of the problems is that Android tablets come in different screen sizes and resolution. The screen size is the actual physical size of the screen's diagonal and is usually measured in inches. The resolution is the number of pixels in the screen and it is usually measured by the number of pixels in the screen's width multiplied by the number of pixels in the screen's height. The screen size and resolution determines the screen density of the device. Screen density affects the appearance of the images used in the application as it is the number of pixels within a physical area of the screen. This is usually quantified using the dots per inch (dpi) measure. Android groups have classified screen densities into four general densities: low, medium, high, and extra high. As of now, Android tablets running in Android 3.0 operating system have medium to high screen densities. 
+
+Android has a way of supporting multiple devices given that the application developer provides the correct resources for the different screen densities. Devices use different resource folders depending on its screen density, particularly for images. Each image folder contains a set of images where the sizes are different per folder. Table \ref{tab:imagefolders} shows the folders that the device accesses during runtime and the icon sizes given a device's screen density classification. This implementation solves the problem with pixelated images on large screen density tablets and oversized images for small screen density tablets.
+	
+\begin{table}[ht]
+\centering
+\caption{Summary of image folders accessed and action bar icon dimensions for each generalized screen density} \vspace{0.25em}
+\begin{tabular}{|p{1in}|>{\centering\arraybackslash}p{1.5in}|>{\centering\arraybackslash}p{1.5in}|} \hline
+ 				& Medium density screen (160 dpi) & High density screen (240 dpi) \\ \hline
+Image Folder 	& drawable-mdpi & drawable-hdpi \\ \hline
+Icon Size 		& 38 x 38 px & 48 x 48 px \\ \hline
+\end{tabular}
+\label{tab:imagefolders}
+\end{table}
+
+Three Android tablets of different screen densities were used in order to check if the application will appear appropriately in different devices. The models were Acer Iconia Tab, Samsung Galaxy Tab 7 plus, and Motorola Xoom. The specifications of each tablet devices are presented in Table \ref{tab:androidtabletsscreenspecifications}
+
+\begin{table}[ht]
+\centering
+\caption{Android tablets and their screen specifications} \vspace{0.25em}
+\begin{tabular}{|p{1.5in}|>{\centering\arraybackslash}p{1in}|>{\centering\arraybackslash}p{1in}|>{\centering\arraybackslash}p{1in}|} \hline
+ 				& Acer Iconia Tab A200 & Samsung Galaxy Tab 7.0 Plus & Motorola Xoom \\ \hline
+Screen Size  	& 10.1 inches & 7 inches & 10.1 inches \\ \hline
+Screen Resolution & 800 x 1280 pixels & 600 x 1024 pixels & 800 x 1280 pixels \\ \hline
+Screen Density & \~149 dpi (medium) & \~170 dpi (high) & \~149 dpi (medium) \\ \hline
+\end{tabular}
+\label{tab:androidtabletsscreenspecifications}
+\end{table}
+
+The Note Assistant application was supported by the three devices with different screen densities. Every icon was shown and nothing was cluttered. No image was pixelated. Screenshots from the three devices are shown in Figures \ref{fig:acernotebooksactivity} to \ref{fig:motorolanotesactivity}.
+
+\pagebreak
+
+\begin{figure}[htbp!]
+   \centering  
+   \includegraphics[height=9cm, width=14cm]{AcerNotebooks.eps}
+   \caption{Acer Iconia Tab A200 displaying \textit{NotebooksActivity}}
+   \label{fig:acernotebooksactivity}
+\end{figure}
+
+\begin{figure}[htbp!]            
+   \centering                   
+   \includegraphics[height=9cm, width=14cm]{AcerNotes.eps}    
+   \caption{Acer Iconia Tab A200 displaying \textit{NotesActivity}}
+   \label{fig:acernotesactivity}
+\end{figure}
+
+\begin{figure}[htbp!]              
+   \centering                  
+   \includegraphics[height=9cm, width=14cm]{SamsungNotebooks.eps}
+   \caption{Samsung Galaxy Tab 7.0 Plus displaying \textit{NotebooksActivity}}
+   \label{fig:samsungnotebooksactivity}
+\end{figure}
+
+\begin{figure}[htbp!]             
+   \centering                  
+   \includegraphics[height=9cm, width=14cm]{SamsungNotes.eps}      
+   \caption{Samsung Galaxy Tab 7.0 Plus displaying \textit{NotesActivity}}
+   \label{fig:samsungnotesactivity}
+\end{figure}
+
+\begin{figure}[htbp!]               
+   \centering                
+   \includegraphics[height=9cm, width=14cm]{MotorolaNotebooks.eps}      
+   \caption{Motorola Xoom displaying \textit{NotebooksActivity}}
+   \label{fig:motorolanotebooksactivity}
+\end{figure}
+
+\begin{figure}[htbp!]           
+   \centering                 
+   \includegraphics[height=9cm, width=14cm]{MotorolaNotes.eps}   
+   \caption{Motorola Xoom displaying \textit{NotesActivity}}
+   \label{fig:motorolanotesactivity}
+\end{figure}
+
+\pagebreak
+
+\subsection{Handwritten Notes}
+\label{sec:handwrittennotes}
+
+Handwritten notes are designed to allow users to write notes with their free hand. It is commonly known as drawings, leaving the users to write down anything they want and making up of notes will depend on the penmanship styles of the user. Drawing of straight lines is also possible to underline specific contents of the page. Lastly, highlighting can emphasize specific points in the page.
+
+The three classifications of handwritten notes are implemented the same way with minor differences. Points of a note are recorded from the time the input point touches the screen until it is removed from the screen. Dynamically, the drawing can be seen as it is being written except for the line tool for the middle points of notes change depending on where the last point is positioned. The marker tool draws following the chosen color and size. The line tool works the same as the marker tool except that only the first and last points are considered and a straight line will automatically be drawn. Lastly, the highlighter tool is much thicker than the marker tool and its opacity is significantly low for the elements behind to still be visible.
+
+Issues concerning the layering of views arise when the whole page accepted handwritten notes even at the tools area. The previous implementation with the \textit{SurfaceView} causes the error as this view always remains at the topmost layer of the page. It was changed to a \textit{CustomView} to control the layering of the view to perfectly present the page with notes properly arranged.
+
+The task of saving all the points comprising the handwritten note is an exceedingly heavy implementation; this lead to the change of implementation to the \textit{Path.quadTo} function. The use of this function does not only lighten the process of saving the points, it also makes the drawing smooth making it visually appealing to the user.
+
+\subsection{Text Notes and Sticky Notes}
+\label{sec:textnotesandstickynotes}
+
+Text Notes and Sticky Notes are classified under the Typewritten Notes. Text Note's and Sticky Note's layouts are defined in an XML shown in Listings \ref{lst:textnotexml} and \ref{lst:stickynotexml} respectively. Their layouts have a \textit{SelectableText}, a custom \textit{TextView} that enables text selection. It has an algorithm that detects what character index is selected in a user’s touch to facilitate selection. This algorithm is shown in Listing \ref{lst:getcharindexfromtouch}. Without this function, the user will not be able to freely select parts of the text since Android tends to select the whole text or specific words of the text.
+
+\begin{lstlisting}[frame=single, label=lst:textnotexml, caption=XML layout of text note]
+<?xml version="1.0" encoding="utf-8"?>
+<com.noteassistant.view.TextNote>
+   <ImageButton
+      android:id="@+id/editableTextDeleteBtn"/>
+   <RelativeLayout>
+      <com.noteassistant.view.SelectableText
+         android:id="@+id/mainEditableText"/>
+      <TextView
+         android:id="@+id/insert_text_label"
+         android:text="Insert Text here"/>
+   </RelativeLayout>
+</com.noteassistant.view.TextNote>
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single, label=lst:stickynotexml, caption=XML layout of sticky note]
+<?xml version="1.0" encoding="utf-8"?>
+<com.noteassistant.view.TextNote>
+    <ImageButton
+        android:id="@+id/stickyNoteDeleteBtn"/>
+    <ScrollView>
+        <RelativeLayout>
+           <com.noteassistant.view.SelectableText
+               android:id="@+id/stickyNoteText"/>
+           <TextView
+              android:id="@+id/insert_text_label"
+              android:text="Insert Text here"/>
+         </RelativeLayout>
+    </ScrollView>
+</com.noteassistant.view.TextNote>
+\end{lstlisting}
+
+The \textit{SelectableText} has a \textit{TextView} underneath that appears whenever the \textit{SelectableText} is empty. The \textit{TextView} has text contents that say "Insert Text Here." This only shows when the \textit{SelectableText} is empty so that the user knows where to tap in order to type. The soft keyboard appears whenever this is tapped and when no physical keyboard is available. The layout has a delete button on its upper right portion and is represented by an \textit{ImageButton}. The Text Note's and Sticky Note's layouts are almost the same except for the \textit{ScrollView} in the Sticky Note's layout that wraps the Selectable Text and \textit{TextView}. A Sticky Note has a yellow background to resemble the real life sticky notes.
+
+\begin{lstlisting}[frame=single, label=lst:getcharindexfromtouch, caption=Algorithm for getCharIndexFromTouch]
+<?xml version="1.0" encoding="utf-8"?>
+<com.noteassistant.view.TextNote>
+    <ImageButton
+        android:id="@+id/stickyNoteDeleteBtn"/>
+    <ScrollView>
+        <RelativeLayout>
+           <com.noteassistant.view.SelectableText
+               android:id="@+id/stickyNoteText"/>
+           <TextView
+              android:id="@+id/insert_text_label"
+              android:text="Insert Text here"/>
+         </RelativeLayout>
+    </ScrollView>
+</com.noteassistant.view.TextNote>
+\end{lstlisting}
+
+A typewritten note has styles in it. A style represents the text styles that a text note possesses at a given state. Current styles that are recognized by Note Assistant are bold, italics, underline, and highlight. A bold style is applied if a typewritten note is in focus and the bold option in the toolbar is selected. The same principle applies to italics and underline.  
+
+When a new typewritten note is placed, a \textit{TextNote} object is created and is stored by the Notes Manager. The current date and time, owner key, x and y coordinates, and selected style options are set in that object. This object will then be added to the note objects layer. The \textit{SaveNoteObjectsAsyncTask} is then executed with the newly created object as the parameter to save the new object and its first state.
+
+	The behavior of the Typewritten notes depend on the current mode. These notes cannot be selected and edited in three situations. First is when the user is in review mode. Second is when the user is currently writing using the pencil and line tools. Third is when the user is mapping or connecting note objects. Disabling the typewritten note is done by setting the selectable property of the selectable text to false. Typewritten notes cannot be edited but can be selected when highlighting.
+
+	Note objects should be draggable so typewritten notes listen for touches from the user so it knows when it should be dragged. \textit{TextDragListener}, a custom \textit{OnTouchListener} is used in order to implement the dragging of the typewritten notes. The touch of the user is handled by the \textit{onTouch} method of the \textit{TextDragListener} class. This method is called when the user touches the object, moves the object and lifts the finger from the object. The dragging of the typewritten note should be controlled as there should be enough change in distance before it could be dragged. If this is not implemented, the typewritten note will easily be moved to a different position if the user touched it. A distance of at least 2 pixels is used as a way of determining when the typewritten note should be dragged. Implementing this ensures that the text note will only move if it is dragged more than two pixels from the last touch. Moving of the text note is done by adding to the typewritten note's margins the difference of the old and new points of user's touches. A pseudocode of this implementation is shown in Listing \ref{lst:noteobjectdragging}.
+
+\begin{lstlisting}[frame=single, label=lst:noteobjectdragging, caption=Pseudocode for Note Object Dragging]
+CASE Action OF:
+   USER TOUCHES OBJECT:
+      Save new X and Y as last touch X and Y
+   
+   USER MOVES OBJECT:	
+      IF Distance of last touch from new touch > 2 THEN
+	     Add to the margins the difference of the old and new touch
+	     Apply margins to note object
+	     Save new X and Y as last touch X and Y
+	  END IF
+	  
+   USER LIFTS FINGER:
+      Save New State
+END CASE
+\end{lstlisting}
+
+\subsection{Media Notes}
+\label{sec:medianotes}
+
+Media notes are classified into image notes, video notes, and audio notes. These types of notes reference a media file from the application's directory. Each type of media note has its own naming convention for its source media file. All media file names follow the naming convention,  <media type abbreviation> + "*" + <date and time> + "*" + <user key> + <file extension> . The media type abbreviation "img" is for images, "vid" for videos, and "aud" for audio. This naming convention is used in order for the application to know the owner of the media file and the date and time it was used. 
+
+Media notes are draggable. It uses the \textit{MediaDragListener}, a custom \textit{OnTouchListener} that listens for user's touches. It has the same implementation with typewritten notes when it comes to dragging which was explained in Section \ref{sec:textnotesandstickynotes}.
+
+\subsubsection{Image Notes}
+\label{sec:imagenotes}
+
+Image Notes are defined in an XML file with an \textit{ImageView} to contain the image and an \textit{ImageButton} for the delete button. The Image Note itself is a subclass of the \textit{MediaNote} class. The \textit{ImageView} is set to 300x300 pixels to have a standard default size. 
+
+There can be two ways of creating an Image Note. One is to import an image file from files and the other method is to capture an image using the device's camera. 
+
+When importing an image from the user's files, there are important steps that must followed in order to successfully put it into the user's page. 
+
+\begin{enumerate}
+\item The system displays a list of files through a \textit{ListView}. 
+\item When the user selects a file from this list, a separate thread will copy the selected image file into the application's directory, using its own naming convention for images. This is done in order to avoid images with duplicate filenames. 
+\item The filename of the copied image will be stored by the Notes Manager's \textit{clipboardMedia}. 
+\item When the user taps the page to place the image, an Image Note will be created using the stored filename in the imagedir in order to display the image. This is to avoid missing images whenever the image is deleted from the original directory. 
+\end{enumerate}
+
+To import an image captured from the device's camera, the camera application must be started by calling the Activity's \textit{startActivityForResult} function with the intent for capturing images as the parameter. This intent is created using the \textit{MediaStore.ACTION\_IMAGE\_CAPTURE} as parameter. When an image is successfully captured, it will be saved into the user's directory. The image will then be copied to the application's directory following the same process when importing an image from files.  
+
+During the early stages of development, a conflict in capturing images was encountered. Once the image is captured and saved, a cursor error occurs when the Note Assistant's activity resumes. This error is an issue in Honeycomb devices as the the requery function was deprecated. This function is important as this is called whenever the activity resumes and a query needs to be executed on the database. This problem was resolved by using a \textit{ContentProvider} and a \textit{CursorLoader} which is discussed in Section \ref{sec:datastructure}. 
+
+Images can differ in sizes considering that different devices have different camera resolutions. Importing large images into the user's page has become an issue as this causes an out of memory error. In order to solve the issue, the \textit{inSampleSize} option in the \textit{BitmapFactory} class is set to get a reduced image size to conserve memory. Listing \ref{lst:decodingandscalingimages} shows the pseudocode for scaling the image\footnote[6]{http://note.speshiou.com/2011/02/android\-decodes\-image\-and\-scales\-it\-to.html}.
+
+\begin{lstlisting}[frame=single, label=lst:decodingandscalingimages, caption=Algorithm for decoding and scaling images to reduce memory consumption]
+Bitmap decodeImage(File f) {
+
+   // Decode image size
+   BitmapFactory.Options o = new BitmapFactory.Options();
+   o.inJustDecodeBounds = true;
+   BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+   // Find the correct scale value
+   // Should be power of 2 since it is faster for the
+   // decoder to honor
+   int scale = 1;
+   while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
+	  scale *= 2;
+
+   // Decode with inSampleSize
+   BitmapFactory.Options o2 = new BitmapFactory.Options();
+   o2.inSampleSize = scale;
+	
+   return BitmapFactory.decodeStream(new
+      FileInputStream(f), null, o2);
+}
+\end{lstlisting}
+
+\subsubsection{Audio Notes}
+\label{sec:audionotes}
+
+Audio Notes are defined in an XML file (Listing \ref{lst:audionotexml}) in a way that it will look like a player. It has a play button, stop button, pause button, delete button and a seek bar. The buttons are represented by an \textit{ImageButton} while the seekbar is represented by Android's \textit{SeekBar}. The Audio Note itself is a subclass of the \textit{MediaNote} class. 
+
+\begin{lstlisting}[frame=single, label=lst:audionotexml, caption=Code of audio\_note.xml]
+<?xml version="1.0" encoding="utf-8"?>
+<com.noteassistant.view.MediaNote 
+   android:id="@+id/audioNote">
+   <LinearLayout
+      <Button android:id="@+id/playMediaBtn"/>
+      <Button android:id="@+id/stopMediaBtn"/>
+      <Button android:id="@+id/mediaDeleteBtn"/>
+   </LinearLayout>
+   <SeekBar android:id="@+id/mediaBar"/>
+</com.noteassistant.view.MediaNote>
+\end{lstlisting}
+
+In order to do recording, a \textit{MediaRecorder} object is created. The object's audio source, output format, encoder and output file are set before the recording is started. To execute the recording, the prepare and start functions are called. The functions stop, reset and release are called in order to stop the audio recording and reuse the \textit{MediaRecorder} object. When the recording is stopped, an \textit{AudioNote} is created, stored by the Notes Manager and placed in the Note Objects Layer on the part where the user last touched the page. Once the \textit{AudioNote} is created, a \textit{MediaPlayer} is created and prepared in order for the recording to be played synchronously. 
+
+To play the audio, the start function of the \textit{MediaPlayer} is called. To play a certain part of the audio, the seekbar is dragged and the \textit{seekTo(position)} function is called wherein the position is the time position in the recording file relative to the position of the seekbar. The pause function is used to pause the audio recording from playing. To stop the audio, the \textit{pause} and \textit{seekTo(0)} functions are called.
+
+\subsubsection{Video Notes}
+\label{sec:videonotes}
+
+Video Notes are also designed to look like video players. The Video Note layout is defined in an XML (Listing 5.12) with a \textit{VideoView} and an \textit{ImageButton} for the delete button. The Audio Note itself is a subclass of the \textit{MediaNote} class. The \textit{VideoView} is set to 300x300 pixel density.
+
+\begin{lstlisting}[frame=single, label=lst:videonotexml, caption=Code of video\_note.xml]
+<?xml version="1.0" encoding="utf-8"?>
+<com.noteassistant.view.MediaNote xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/videoNote">
+    <VideoView android:id="@+id/videoView"/>
+    <Button android:id="@+id/mediaDeleteBtn"/>
+</com.noteassistant.view.MediaNote>
+\end{lstlisting}
+
+There are two ways of importing a Video Note to the page. One is to import an existing video file and the other method is to shoot a video using the device's camera. 
+
+When importing a video from the user's files, similar steps as importing an image are executed. In order to do recording, the camera application must be started by calling the Activity's \textit{startActivityForResult} function with the intent of shooting video as the parameter. This intent is created with the parameter \textit{MediaStore.ACTION\_VIDEO\_CAPTURE}. When video recording is done, a separate thread will save this video into the application's directory, using its own naming convention for videos. This is done in order to avoid duplicate videos. The filename of the copied video will be stored by the Notes Manager's \textit{clipboardMedia}.  When the user taps the page to place the video, a Video Note will be created using the stored filename in the Notes Manager. The \textit{VideoView} object's video path will be set. A \textit{MediaController} is then set to the \textit{VideoView} object so that the user will be able to control the video with the user interface that the \textit{MediaController} provides.
+
+\subsection{Concept Mapping}
+\label{sec:conceptmapping}
+
+There are two layers used in order to perform concept mapping. One is the top layer of the page which receives the touch input of the user. The second is the mappings layer which does most of the processing and drawing of the mappings. These layers may be seen in Figure \ref{fig:pageviewlayers}.
+
+The top layer is used to listen for touches during mapping because this is the only layer where no objects could be a conflict for focus. Previous designs wherein the middle layer was used as the touch listener for this operation became problematic as the focus transfers to a \textit{SelectableText} of a Typewritten Note whenever it is touched. 
+
+The main function of the top layer in concept mapping is to provide the position and type of action of the touch event to the mappings layer. The mapppings layer will then execute the appropriate functions given by the touch information provided by the top layer. The top layer has a \textit{TopLayerTouch} listener, a custom touch listener that will listen for user touches. Whenever there is a touch event, the \textit{onTouch} method in the \textit{TopLayerTouch} is called and corresponding methods in the mappings layer are executed given the type of action that the top layer receives. When the user touches the page, the mappings layer detects if there is a "collision" between a note object and the finger. If there is a "collision," the mappings layer will draw a line from the midpoint of that note object to the current point of touch. The line will follow the user's finger until the user releases his or her finger. Once the finger is lifted on top of a different note object, the mappings layer will draw a line connecting the first note object to the second note object with an arrow head on the head of the line. The mapping will be disregarded if there is no first and second note objects touched. Pseudocode of this functionality is shown in Listing \ref{lst:conceptmapping}
+
+\begin{lstlisting}[frame=single, label=lst:conceptmapping, caption=Pseudocode for Concept Mapping]
+CASE Action OF
+   USER TOUCHES SCREEN:
+      Initialize sourceID and destID to -1;
+      sourceID = get Id of touched object
+	  END IF
+   
+   USER MOVES FINGER:
+      Clear all mappings
+      IF sourceID !=-1 THEN
+	     Draw a line from Midpoint of Note with id of SourceID to current touching point
+  	  END IF
+   
+   USER LIFTS FINGER:
+      IF sourceID !=-1 THEN
+         destID = get Id of touched object
+      END IF
+
+   IF destNote !=-1 AND sourceNote != destNote THEN
+      Clear all mappings
+	  Draw a line from midpoint of sourceNote to midpoint of destNote
+	  Save new mapping
+   END IF
+END CASE
+\end{lstlisting}
+
+The \textit{drawArrow} function is used in order to draw an arrow head on the tip of the line. It takes the points of the tip and tail of the line to compute for the positioning and direction of the arrow head. The algorithm for this function is shown in Listing \ref{lst:drawarrowheadalgorithm}\footnote[7]{http://stackoverflow.com/questions/3010803/draw-arrow-on-line-algorithm}.
+
+\begin{lstlisting}[frame=single, label=lst:drawarrowheadalgorithm, caption=\textit{DrawArrowHead} algorithm as posted by Komplot in stackoverflow.com]
+private void drawArrowHead(Point tail, Point head) {
+
+   tipX = X of tip point
+   tipY = Y of tip point
+   tailX = X of tail point
+   tailY = Y of tail point
+    	
+
+   arrowLength = ARROW_SIZE;    // Set arrow length
+
+   dx = tipX - tailX; // Get distance of tip X from tail X   
+   dy = tipY - tailY; // Get distance of tip Y from tail Y
+
+   theta = Math.atan2(dy, dx); // Get theta
+
+   // Get x and y of one side of the triangle
+   rad = Math.toRadians(35); // Can be adjusted
+   x = tipX - arrowLength * Math.cos(theta + rad);
+   y = tipY - arrowLength * Math.sin(theta + rad);
+
+   // Get x and y of other side of the triangle
+   phi2 = Math.toRadians(-35); // Can be adjusted
+   x2 = tipX - arrowLength * Math.cos(theta + phi2);
+   y2 = tipY - arrowLength * Math.sin(theta + phi2);
+
+   // Draw triangle using the three points
+   drawPoint(tipX, tipY);
+   drawLineTo(x1, x2);
+   drawLineTo(x2, y2);
+}
+\end{lstlisting}
+
+The \textit{GetObjectNearestPoint} function is used to locate the part of the note object that a mapping should start or end. This basically helps to know where to draw the shortest path between the edges of the two note objects. This was implemented after the \textit{GetObjectMidPoint} function had issues as latter function facilitates in drawing the mapping from the midpoint of the source note object to the midpoint of the destination note object. \textit{GetObjectNearestPoint} replaced \textit{GetObjectMidPoint} because limiting the mappings to the edges of \textit{TextNotes} make them look neater as they do not overlap with the text in Text Notes. The algorithm is shown in Listing \ref{lst:getobjectnearestpointalgorithm}\footnote[8]{http://forums.indiegamer.com/showthread.php?15152-Find-Nearest-point-in-a-rectangle}. The function accepts the indices of the source and destination notes to be mapped and point of the other source note object as parameters and this returns the nearest point of the destination note object.
+
+\begin{lstlisting}[frame=single, label=lst:getobjectnearestpointalgorithm, caption=\textit{GetObjectNearestPoint} algorithm as posted by Alex Weldon in indiegamer.com]
+Point point = point of reference
+
+x_min = rect.x; // Set upper left of object as x_min 
+y_min = rect.y; // Set bottom left of object as y_min
+x_max = rect.x + rect.width; // Set upper right as x_max
+y_max = rect.y + rect.height; // Set lower right as y_max
+
+// Get the x of nearest point
+if (point.x < x_min)
+   point_x = x_min;
+else if (point.x > x_max) 
+   point_x = x_max;
+else 
+   point_x = point.x;
+
+// Get the y of nearest point
+if (point.y < y_min) 
+   point_y = y_min;
+else if (point.y > y_max) 
+   point_y = y_max;
+else 
+   point_y = point.y;
+
+return new Point(point_x,point_y);
+\end{lstlisting}
+
+Mappings between objects can be removed by retracing them. This is a better approach compared to the original idea of having delete buttons at the tails of each mapping because the buttons will only clutter the user interface.
+
+\subsection{Revision History}
+\label{sec:revisionhistory}
+
+To execute the Revision history, a revision queue is used in order to store all the revision items on a page. A revision item contains a \textit{type}, \textit{datetime}, \textit{ownerId}, and its index in the note states array. This represents a state of a note in a given time.
+
+Revision History was designed to have two phases, namely the retrieval phase and the the execution phase. In the retrieval phase, the Notes Manager retrieves all the page's notes and their states. Revision items are created based on these states, and then queued into the revision queue. 
+
+There were issues encountered in the retrieval phase in relation to the old database structure. The old design requires the retrieval phase to retrieve each of the note's states in the database from tables that correspond to their note types. The retrieved states will then have to be sorted according to date/time using a \textit{Quicksort} algorithm so that the execution of the revision history will be in order. The resulting performance was unsatisfactory, necessitating the use of 
+Insertion sort instead. The retrieval phase became faster but still not fast enough. The last sort algorithm that was attempted was the \textit{Mergesort} algorithm. However, the use of \textit{Mergesort} did not lead to an ideal solution because as the number of states in the page increased, the retrieval phase became slower. The issue was resolved by restructuring the database. The old and new database design are shown in Figure \ref{fig:oldnewdatabasefornotes}. The new database design allows for the retrieval of the states of all note objects in a sorted order with a single query.
+
+\begin{figure}[htbp!]
+   \centering    
+   \includegraphics[height=8cm, width=13cm]{OldNewDatabaseOfNotes.eps}
+   \caption{Old and New Database Designs for Notes}
+   \label{fig:oldnewdatabasefornotes}
+\end{figure}
+
+The execution phase is the point where the revision items in the revision queue are carried out. This is done by using a \textit{Runnable} thread which calls the \textit{executeRevisionHistoryQueues} function repeatedly until the queue is empty. It keeps track of the \textit{executeTime} which is the current system time subtracted by the start time of the revision history. This is used in order to know what items in the revision queue will be executed considering the \textit{datetime} of each revision items. Figure \ref{fig:revisionhistoryflowchart} shows the flowchart of the execution phase.
+
+\begin{figure}[htbp!]          
+   \centering                 
+   \includegraphics[height=10cm, width=15cm]{RevisionHistoryFlowChart.eps}   
+   \caption{Flowchart of Execution Phase of Revision History}
+   \label{fig:revisionhistoryflowchart}
+\end{figure}
+
+An issue of the revision history was that it solely depends on the date and time of the revision items. The items will only be executed if the \textit{executeTime} is greater than its \textit{datetime}. This is a problem when revision items have very long gaps. Notes that were done a day after will only be executed a day after. To shorten the waiting time of revision items with long gaps in between, a checker is used after every execution and an offset is added to the \textit{executeTime}. The checker checks if the next revision item's \textit{datetime} is longer than 30 seconds. If it is longer than 30 seconds, the offset will be increased by 30 seconds. The algorithm is shown in Listing \ref{lst:waitingtimereductionalgorithm}.
+
+\begin{lstlisting}[frame=single, label=lst:waitingtimereductionalgorithm, caption=Algorithm for Reduction of Waiting Time during Revision History]
+offSet = 0;
+do {
+   index = 0; 
+   currentTime = getCurrentTime() + offSet - startTime;
+
+   do {
+   index += 1;
+   } while(revision's dateTime at index > currentTime)
+
+   Perform All Actions Before Index;
+
+   If nextNoteTime > MAX_WAITING_TIME
+      offSet += MAX_WAITING_TIME
+
+} while(revisionQueue NOT empty);
+\end{lstlisting}
+
+\subsection{Note Sharing}
+\label{sec:notesharing}
+
+The Note Sharing functionality is designed to facilitate the sharing of notebook/s from a user to another. The sharing undergoes a number of processes to successfully transfer notebook/s. Data is first to be exported from the sender's database. These data are sent and received via the Bluetooth functionality of the device. It will finally be imported to the receiver's database.
+
+The data to be exported is prepared by extracting the data of the selected notebook/s from the sender's database. The selection of notebook/s can be done in the shelf. The extracted data will then be saved to an XML file as storage of the records. Other external files such as those for media notes are also collected to be prepared for sharing. All the files are compressed in a ZIP file for the notebook to be sent as a package.
+
+Data are stored to an XML file rather than to a text file mainly because text files are easily accessible by the users as these files are allowed by tablet devices to be edited. Data are restricted not to be accessible by users; therefore an XML file is used to prevent data being manipulated by user. Also, an XML parser is available for easy and faster retrieval of data compared to evaluating each character in a text file. To surely secure that the data to be shared will not be manipulated, files are deleted right after successfully sending file/s.
+
+Problems concerning successfully sending all the necessary files have been encountered. To solve these, the necessary files are compressed to just one file so when transferring of file/s fails, corrupted files will be prevented. Nothing will be sent therefore resulting to having no problems with the retrieval of data to the receivers device.
+
+The Bluetooth API provided for Android Application Development is utilized to implement the sending of files via Bluetooth. The file/s to be sent just has to be located through a URI and the device will automatically send the file/s.
+
+The notebook/s to be imported is automatically checked once the device receives the compressed file having the data about the shared notebook/s. The application is programmed to automatically extract the files from the compressed file and relocate it to its proper location. The XML file containing all the information about the notebook/s and its notes is parsed to import these data to the receiver's database. The \textit{SAXParser} is used to parse the XML file and do the necessary importation of data. The shared notebook will be accessible for the receiver in its shelf.
+
+\subsection{Note Integration}
+\label{sec:noteintegration}
+
+Note Integration was made possible through the use of registration key.  The application assigns a unique registration key to the application owner as one registers. There is no way for the application to check duplicates for these keys. The approach used is to make the registration key, a String object that is a concatenation of the user's email, current date time, and a random number from 0 to 999. The registration key of the owner name is stored in the user's notebooks, pages and notes as owner key so that these will have a reference of their owner.
+
+When notes are retrieved from the database, the Notes Manager keeps an array of owner keys. After the retrieval, layers will be created based from these owner keys so that a layer would represent the user's notes. A layer contains the user information and its visibility. When the user chooses to change a layer's visibility, it will access the owner key through the layer's user and then set all the note objects with the same owner key to desired visibility. For handwritten notes, all drawings are cleared and the notes that should be visible are redrawn. 
+
+\subsection{Document Import}
+\label{sec:documentimport}
+
+Since there were no existing APIs for importing of PDF document, \textit{PdfViewer}, an open source application, was utilized and selected functions from this application were used to implement PDF-related features needed in Note Assistant. 
+
+\textit{PdfViewer} creates a \textit{GraphView} object to display a page in the PDF file. A \textit{GraphView} is placed in the templates layer of Note Assistant so that PDF files can be displayed underneath the middle layer. The \textit{GraphView} acts as an image form of the PDF page therefore, selection of text or images within the PDF will not be possible.
+
+When a PDF file is imported into a page with n pages, n-1 pages will be created, each having a reference to the PDF as its template and the page number it should display. Note Assistant will copy this document into the document folder of the application's directory. This copy of the PDF file will be used by the application in order to prevent missing references when the user deletes the original one.

@@ -1,0 +1,174 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Filename    : chapter_1.tex 
+%
+%   Description : This file will contain your Research Description.
+%                 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\Section{Research Description}
+\label{sec:researchdesc}
+
+\subsection{Overview of the Current State of Technology}
+\label{sec:overview}
+
+Plant phenotyping is the process of gathering the observable traits of a plant in order to assess its growth, health and development, which is vital in the assessment of its more complex traits (Helmert & Lasinger, 2010). This process helps in finding out how to increase the yield and resilience of crops. In the middle of 1990s, plant breeders depend on intuition to select different traits that can increase crop yield or resiliency, but with the advent of  modern genetics, scientists and farmers now have the capability to breed crops selectively with precision and accuracy (Finkel, 2009). However, they still need to grow, and analyze the genetic traits of these plants to aid in selective breeding making plant phenotyping vital in the selective breeding process (Helmert & Lasinger, 2010).
+
+	Existing technologies utilize image processing to automate plant phenotyping. The Scanalyzer 3D Phenotyping platform (Eberius, n.d.) developed by LemnaTec is an automated plant phenotyping system that can phenotype mature plants, such as corn, tomato and rice. It is capable of simultaneously phenotyping plants in large quantities by automatically moving them into a stereoscopic camera by placing all the plants in a conveyor belt. For rice, the system uses the HTS Bonit, an image processing software that analyzes the area, color, and height of the leaves (Eberius, n.d.). While the Scanalyzer 3D has been properly tested and deployed, the platform is proprietary and the investment on infrastructure to deploy it is expensive (Tsaftaris & Noustos, 2009). PHENOPSIS (Aguirrezabal et. al, 2006)  is an automated system by Optimalog that uses image processing for phenotyping Arabidopsis thaliana. It uses a mechanical arm to optimally position a displace sensor, and a camera on each plant to collect phenotypic data such leaf area, leaf thickness, and proportions of leaf tissues. PHENOPSIS is a proprietary solution designed for the French National Institute for Agricultural Research. The system only handles phenotyping of Arabidopsis thaliana and it is only designed to work with screen houses used by the institute (Aguirrezabal et. al., 2006).
+
+	Despite the ability of the current systems to automate plant phenotyping by way of image processing, these systems are costly to deploy and maintain. As such, these systems are mostly used by private sectors with the capacity to provide funds for research and development. These systems are not a viable solution for those who do not have the financial capacity but face the same problem. For this reason, the system would still utilize image processing techniques for automated phenotyping, However, the deployment and set-up of the system should be affordable as well.
+
+
+\subsection{Research Objectives}
+\label{sec:researchobjectives}
+
+\subsubsection{General Objective}
+\label{sec:generalobjective}
+
+To develop a rice phenotyping system that automates the collection of plant greenness and volume of plant biomass.
+
+\subsubsection{Specific Objectives}
+\label{sec:specificobjectives}
+
+\begin{enumerate}
+	\item To survey the current process of plant phenotyping in the Philippines;
+    \item To evaluate existing systems that automates parts of the plant phenotyping process;
+    \item To review image processing techniques that can be utilized in the system; 
+    \item To identify the features of the plant that will be used to determine the greenness and volume of plant biomass;
+    \item To determine a proper camera and plant setup that will aid in automatic phenotyping; and
+    \item To define metrics for evaluating the accuracy of the system 
+
+\end{enumerate}
+
+\subsection{Scope and Limitations of the Research}
+\label{sec:scopelimitations}
+
+In order to improve on the process of plant phenotyping, learning about the phenotyping procedure is a critical step. Moreover, the target plant to be automatically phenotyped is C4 Rice. Because of these requirements, consultation with the International Rice Research Institute (IRRI) shall be conducted. 
+
+	In other parts of the world, there already exist various systems which automate parts of the plant phenotyping process. These related systems must be studied in order to be evaluate the potential problems, risks, and/or disadvantages of the systems and plant phenotyping in general, so that these issues can be addressed in the proposed system.
+
+	Since the system will rely on image processing to automate the phenotyping process, various techniques and methods in image processing must be reviewed in order to determine which among them are appropriate for use in analyzing the greenness and biomass of the plants.
+
+	In order to measure the greenness and biomass of the plants, there are specific features that should be observed.  These should be identified during the study.
+
+	The camera and plant setup for the proposed system is designed to work optimally with the current IRRI setup. Varying lighting for different parts of the day must also be considered in order to have consistent results.
+
+	Once the image processing techniques to be used have been determined and implemented, the system shall be tested for its accuracy in determining the greenness and biomass of the plant during its tillering and mid-tillering stage. The accuracy of the system will be determined by comparing its phenotyping results to the manual method of phenotyping. The system shall be tested in screen house setups currently being utilized by IRRI.
+
+\subsection{Significance of the Research}
+\label{sec:significance}
+
+Rice is a staple food in the Philippines. Since it is important to the Filipino population, the country, limited by its small land area, high population growth and poorly maintained irrigation infrastructure, has to import from other countries because the current supply is not enough (International Rice Research Institute [IRRI], n.d.). 
+
+Rice plants undergo phenotyping to aid in the production of needed variants. Currently, C4 Rice is the projected outcome of an ongoing research. In the research being conducted by IRRI, the plant will be modified so that it will make use of the C4 system of photosynthesis.  According to IRRI (n.d), through the C4 system, the crop yield will increase while the plant uses less resources, making this variant a possible solution to rice insufficiency.  There are several varieties of plants and hybrids that are being experimented upon in IRRI and given the current method of phenotyping, this process can be tedious to the scientists. Therefore, by automating the process, scientists will be able to produce faster results and focus more on analysis of these results. Moreover, through automation, the data that they gather can become more accurate and consistent. 
+
+Phenotyping can also aid in determining how to increase crop yield.  By making the system automated, phenotyping will be a less laborious and time-consuming task for researchers. While C4 rice will be the initial specimen, it is possible that other rice or plant species can be tested in the system for further research, which can increase the system’s viability to research groups besides IRRI.
+
+In the technological aspect, image processing will provide an efficient way of phenotyping and aid or possibly replace manual analysis.  Automation of the process will increase the precision of the results and minimize human error and inconsistency. Data collection will also be more convenient since results will be stored by the system along the process, which will also be useful for further researches about the plants. Moreover, the integration of image processing algorithms in the system will expand possible applications and open new avenues in the fields of image processing and phenotyping. Future researchers will also be to use this study as a reference and springboard to further advance studies in the fields of image processing and plant phenotyping.
+ 
+\subsection{Research Methodology}
+\label{sec:methodology}
+
+This chapter lists the steps and activities that have been and will be performed in order to accomplish the objectives of the project. This section will cover specific activities from Thesis pre-proposal to the final Thesis documentation.
+
+	The discussion will cover the methods for gathering data and eliciting requirements, designing the system, implementation, testing and validation of the system, analysis of the data gathered in the evaluation, presentation of the thesis, and final documentation.
+
+\subsubsection{Literature Survey}
+\label{sec:literaturesurvey}
+
+Various related literature was surveyed in this phase. Existing Automated Phenotyping systems were reviewed in order to understand the design and implementation of these systems. Image processing tools and pipelines were reviewed to understand as well as adapt the appropriate algorithms and tools into the design of system. Studies on Manual Plant Phenotyping will also reviewed to understand the tools, processes and crucial steps being used phenotyping plant greenness and biomass that can be matched in the system design, and to survey what improvements can be developed in the Luntian system. 
+
+\subsubsection{Data Gathering}
+\label{sec:datagathering}
+
+n order to improve the efficacy and efficiency of the system, data gathering must be intensive as well as exhaustive. To accomplish this, International Rice Research Institute (IRRI) has been consulted on matters regarding the development of the system. This partnership enabled the availability of immediate feedback and first-hand data on the proposal. A variety of literature and systems on topics and methods related to the domain of the paper was also studied prior to the implementation of the system. The data gathered from IRRI were:   
+
+\begin{itemize}
+\item Screen house specifications
+\item Manual phenotyping process
+\item Phenotyping instruments and equipment used by IRRI
+\item Information about the C4 rice research
+\item Additional related literature
+\end{itemize}
+
+\subsubsection{System Design}
+\label{sec:softwareconceptanddesign}
+
+The design of the system has implement two core functionalities. The first core module will enable the system to determine the greenness of the phenotyped plants. The second core module would allow the system to be able to evaluate plant biomass.  There are be several algorithms that may be adopted or created in developing the modules; these algorithms are specified. The types of outputs and the metrics and measures the system will eventually use has also been specified and any limitations in the system design has been identified.
+
+\subsubsection{Implementation}
+\label{sec:implementation}
+
+The software design from the previous phase was implemented in the target language and platform. Bottom-up approach was employed, where software modules were developed, unit tested then integrated to form the overall system. Collaborations were maintained among the proponents to ensure that component interfaces were properly designed. This also ensured that problems and issues were addressed early on. Integration testing and system function testing were performed to validate that the different features of the software performed as intended according to specifications. The thesis adviser was consulted regularly for feedback and recommendations on the developing software. 
+
+
+\subsubsection{System Testing and Evaluation}
+\label{sec:systemtesingandrevisions}
+
+The accuracy of system will be tested by comparing the phenotypic data gathered by the system to the phenotypic data gathered by the manual phenotyping process. The tests will be done together with IRRI in order to use the screen house facilities of the institute, and get their feedback on the performance and implementation of the system.
+
+\subsubsection{Presentation}
+\label{sec:presentation}
+
+The thesis will be presented to the thesis advisor, panelists, and other professors. In this stage, the involved people will be updated about the thesis and findings from experiments will be shared. In this stage, the people involved will evaluate the thesis and share comments, suggestions and reactions.
+
+\subsubsection{Documentation}
+\label{sec:documentation}
+
+Beginning from STRESME up to THSST-3, documentation will be done by the entire group. In this stage, every finding and concern found as well as the activities done will be recorded on paper. Copies of the document will be given to the thesis advisor and the other professors concerned for evaluation. The document will also be revised frequently. The final document will initially be checked by the thesis advisor before being given to the College of Computer Science.
+
+\subsection{Calendar of Activities}
+
+Table \ref{tab:timetableactivities2011} and Table \ref{tab:timetableactivities2012} show a Gantt chart of the activities.  Each bullet represents approximately one week worth of activity.
+
+%
+%  the following commands will be used for filling up the bullets in the Gantt chart
+%
+\newcommand{\weekone}{\textbullet}
+\newcommand{\weektwo}{\textbullet \textbullet}
+\newcommand{\weekthree}{\textbullet \textbullet \textbullet}
+\newcommand{\weekfour}{\textbullet \textbullet \textbullet \textbullet}
+
+%
+%  alternative to bullet is a star 
+%
+\begin{comment}
+   \newcommand{\weekone}{$\star$}
+   \newcommand{\weektwo}{$\star \star$}
+   \newcommand{\weekthree}{$\star \star \star$}
+   \newcommand{\weekfour}{$\star \star \star \star$ }
+\end{comment}
+
+
+\begin{table}[ht]
+\centering
+\caption{Timetable of Activities for 2011} \vspace{0.25em}
+\begin{tabular}{|p{2in}|c|c|c|c|c|c|c|} \hline
+\centering Task & Jun & Jul & Aug & Sept & Oct & Nov & Dec \\ \hline
+Problem Identification      & \weekfour & \weekfour & ~~\weekone &  &  &  &  \\ \hline
+Data Gathering &  &  & \weekfour & ~\weektwo &  &  &  \\ \hline
+Software Concept and Design      &  &  &  & \weekfour & ~\weektwo &  & \\ \hline
+Implementation, Testing and Debugging     &   &  &  &  & ~\weektwo & \weekfour & ~\weektwo\\ \hline
+Analysis of Results      &   &  &  &  &  & ~\weektwo & ~~\weekone \\ \hline
+Presentation &   &  & ~~\weekone  & ~~\weekone & ~\weektwo & ~\weektwo & ~\weektwo\\ \hline
+Documentation &  & ~\weektwo   & ~\weektwo  & ~\weektwo & ~\weektwo & ~\weektwo & ~\weektwo \\ \hline
+\end{tabular}
+\label{tab:timetableactivities2011}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Timetable of Activities for 2012} \vspace{0.25em}
+\begin{tabular}{|p{2in}|c|c|c|c|c|c|c|} \hline
+\centering Task & Jan & Feb & Mar & Apr & May & Jun & Jul  \\ \hline
+Problem Identification      &   &  &  &  &  &  & \\ \hline
+Data Gathering &  &  &  &  &  &  & \\ \hline
+Software Concept and Design      &   &  &  &  &  &  & \\ \hline
+Implementation, Testing and Debugging     & \weekfour & \weekfour & \weekfour & \weektwo & ~~\weekone & \weekfour & ~\weektwo \\ \hline
+Analysis of Results      &  ~~\weekone & ~~\weekone & ~~\weekone &  &  & ~\weektwo & ~\weektwo \\ \hline
+Presentation & ~\weektwo & ~\weektwo & ~\weektwo &  &  & ~\weektwo & ~~\weekone\\ \hline
+Documentation & ~\weektwo & ~\weektwo & ~\weektwo & ~\weektwo  &  ~\weektwo & ~\weektwo & ~\weektwo\\ \hline
+\end{tabular}
+\label{tab:timetableactivities2012}
+\end{table}

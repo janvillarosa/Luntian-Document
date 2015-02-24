@@ -1,0 +1,256 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Filename    : chapter_4.tex 
+%
+%   Description : This file will contain your Proposed Solution.
+%                 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\Section{The Note Assistant System}
+\label{sec:thenoteassistantsystem}
+
+\subsection{System Overview}
+\label{systemoverview}
+
+Note Assistant is a tablet device application that provides digital tools designed after tools used for taking, making and reviewing printed notes. It integrates these tools with functions that aid the different methods of taking and making linear, visual, and voice notes. The system also provides note reviewing features that are complimentary to the note-taking and note-making features.
+
+The system allows users to create Note Assistant notebooks and open a digital document or create a new page within the notebook. Writing, typing, highlighting, adding pictures, and adding voice annotations on the document are among the features provided by the system.
+
+Note Assistant has a directory where it can save digital documents, images, video and audio files used. Note Assistant notebooks can be shared by putting the notebooks data along with the needed files from the directory, into a package. These packages allow users to share, merge, and add notes. 
+
+Note Assistant has a database. Information about the document, users, and notes added to the document are stored in the database. Information about the digital documents, images, videos and audio files are added including the identification, coordinates relative to the page, the author, and the time and date they were added, edited, or removed.
+
+Note Assistant allows users to merge two or more notes written on a certain notebook. These notes are merged together so that users may view notes or annotations of different users all at once. The system also allows users to select whose notes they would like to see at a given time. Note Assistant also has a feature that presents a visual history play back of how the notes were written. This feature helps users follow and understand the train of thoughts of the other users without having to ask them to explain.
+
+The system also provides users with a function that makes the concept mapping method of note taking and making, making it more organized and easier to do and understand. 
+
+\subsection{System Objectives}
+\label{sec:systemobjectives}
+
+\subsubsection{General Objective}
+\label{sec:generalobjectives}
+
+To facilitate note making and reviewing on a tablet device by utilizing touch, pen, and voice modalities and integrating note making functions.
+
+\subsubsection{Specific Objectives}
+\label{sec:specificobjectives}
+
+\begin{enumerate}
+\item To allow users to create or add notebooks and notes;
+\item To allow users to write, type, insert, and record annotations;
+\item To provide tools that will facilitate in methods of taking and making linear, visual, and voice notes;
+\item To allow users to share and combine notes;
+\item To organize notes; and
+\item To create a visual history of all annotations made.
+\end{enumerate}
+
+\subsection{System Scope and Limitations}
+\label{sec:systemscopeandlimitations}
+
+Digital documents opened may come in the forms of PDF and Image formats. Digital documents opened in the Note Assistant system are treated as images. Copies of these digital documents will be saved in the documents folder in the Note Assistant directory.
+
+Annotations made are not merged into the same image as the digital note being annotated on. Annotations may be written using the digital marker. The precision of the annotations will be dependent on the physical tools used which may include a digital pen. Annotations may be typed by inserting a text note and using a digital or an external keyboard. Data of typewritten annotations will be saved in the database. Users may insert annotations in the forms of image, video, and audio files. Users may also record videos or voice annotations. Users may continue in taking down notes while audio recording.
+
+The system was implemented on the Android platform and it provides tools as previously mentioned. It also provides other tools that will aid in annotations such as a highlighter, line, and eraser, among other. The eraser tool can only be used to erase handwritten annotations. 
+
+It cannot be used to erase parts in the digital document. The aforementioned tools will aid in methods of taking and making linear and voice notes. The system will provide a function to aid in concept mapping, a visual method of taking and making notes.
+
+The system allows users to share notes. The Note Assistant system places notes and annotations on their proper pages. It does not synthesize, summarize, or manipulate the notes in any way. It also organizes notes by author. It allows users to display or hide notes by selecting the author/s of the notes they would like to display or hide.
+
+The system will keep track of the date and time of when annotations were made. It will use this information to sequentially display the annotations made. Annotations that were typed will be displayed as the complete text or when the author exited the text box mode. Annotations in the form of an image, audio, or video filed will be displayed as is. 
+
+\subsection{System Architecture}
+\label{sec:systemarchitecture}
+
+\begin{figure}[htbp!] 
+   \centering
+   \includegraphics[height=9cm, width=14cm]{SystemArchitecture.eps}
+   \caption{Architectural Design of Note Assistant}
+   \label{fig:systemarchitecture}
+\end{figure}
+
+Figure \ref{fig:systemarchitecture} shows a simplified diagram of the system's architectural design. The four modules are represented in green, rounded rectangles. Relationships of each module are connected with arrows. Files are represented in folded corner rectangles.
+
+\pagebreak
+
+The first step for the system to work is that the user should provide one's information such as the user's name, email and other data. From the information given, the system will generate a user key which will be unique for the user. The account information will be handled by the User Module. Once the account information is set, other functionalities of the other modules will be ready for operation.
+
+The user can add and name a new notebook through the Notes Management Module. The user key will be included in the notebook's data during the creation of the notebook. The Notes Management Module is the mainly responsible for the organization of notes stored in the system. It can handle removing, importing, and sharing of notes and notebooks.
+
+Once a user has selected a notebook in the Notes Management Module, the user can now start to take and make notes. Past notes will be retrieved by the Notes Assistant Module from the Notes Management Module. The main responsibility of the Notes Assistant Module is to allow the user to add one's notes which are auto-saved and then stored to the proper notebook by the Notes Management Module.
+
+The Note Sharing Module is responsible of handling the outgoing and incoming notebooks and notes. It retrieves the notebooks and notes from the Note Management Module. The received notebooks and notes are then passed on by the Note Sharing Module to the Note Management Module.
+
+When one reviews the notes, the Review Module retrieves the selected notes from the right notebook and then integrates them for visual revision history. It also puts all the annotation packages to the proper documents and layers.
+
+\subsection{System Functions}
+\label{sec:systemfunctions}
+
+\subsubsection{User Module}
+\label{sec:usermodule}
+
+This module handles user account information of the user which will be used by other modules. A screenshot of this module is shown in Figure \ref{fig:usermodule}.
+
+\begin{figure}[htbp!]
+   \centering
+   \includegraphics[height=9cm, width=14cm]{UserModule.eps}
+   \caption{Screenshot of the User Module}
+   \label{fig:usermodule}
+\end{figure}
+
+\begin{itemize}
+\item Account
+\\\\This is where users can change their account information and settings such as name, email, password, contact information, and other settings.
+\end{itemize}
+
+\subsubsection{Note Management Module}
+\label{sec:notemanagementmodule}
+
+This module organizes the notebook and notes in the system.
+
+\begin{itemize}
+\item Notebook and Notes
+\\\\Individual notes are placed inside notebooks. Notebooks are placed on the user's shelf. The shelf is the main interface for the Note Management Module. A screenshot of the shelf is shown in Figure \ref{fig:shelf} . The shelf is where the user can create and name a new notebook. This is also where the user can select where to add new notes. Throwing to trash and permanently deleting of notebooks are also done here.
+
+\begin{figure}[htbp!]
+   \centering
+   \includegraphics[height=9cm, width=14cm]{Shelf.eps}
+   \caption{View of the notebooks on shelf}
+   \label{fig:shelf}
+\end{figure}
+
+\item Edit Notebook
+\\\\A user can edit the notebook' title.
+\item Notebook Options Dialog
+\\\\In this dialog, the Notebook name can be viewed and edited. This is where users can see the notes that they have accessed recently. One can also switch to other notebooks, access notebook information, or return the notebook back to shelf. This dialog can be shown and hidden.
+\end{itemize}
+
+\subsubsection{Note Assistant Module}
+\label{sec:noteassistantmodule}
+
+This module provides the user with the note-taking and annotation tools and other features that facilitate note-taking. The Notes and Annotation Toolbar is shown in Figure \ref{fig:noteandannotationtoolspane}.
+
+\begin{figure}[htbp!]
+   \centering   
+   \includegraphics[height=0.6cm, width=14cm]{ToolsPane.eps} 
+   \caption{Notes and Annotation Tools Pane}
+   \label{fig:noteandannotationtoolspane}
+\end{figure}
+
+\begin{itemize}
+\item Toolbar
+\\\\A user can show or hide the toolbar.
+\item Marker
+\\\\A user can select the color, and size of a marker they will use to write annotations.
+
+\begin{figure}[htbp!]
+   \centering    
+   \includegraphics[height=9cm, width=14cm]{VirtualKeyboard.eps}
+   \caption{Virtual Keyboard}
+   \label{fig:virtualkeyboard}
+\end{figure}
+
+\item Text
+\\\\Users can insert text boxes in which they can type using a virtual or external keyboard anywhere in the page. Users can also select the font size, and color. Bold, italics, and underline can be applied to the text. The virtual keyboard opens whenever the text tool is used and an external keyboard is not available. This is shown in Figure \ref{fig:virtualkeyboard}.
+\item Highlighter
+\\\\A user can select the color, and size of the highlighter one will use to highlight parts of the page or a text.
+\item Ruler
+\\\\A user can create straight lines using this tool. The user can select the color and thickness of the lines to be created.
+\item Eraser
+\\\\A user can erase written annotations. The user can change the size of the eraser.
+\item Hand
+\\\\A user can pan the notes using the hand tool.
+\item Sticky Notes
+\\\\Users can add sticky notes on the page. Users can also add text on sticky notes.
+\item Media Annotation
+\\\\Users can select an area in the document where they would like to insert a media file. They can select between image, audio, and video. Upon selection they will select if they will use a media file that can be found in the device or if they will record a new one. If the users will take a new picture of an image or record a video, they must do that before they proceed with any other actions. However, if they choose to record an audio file or a voice annotation, the users may simultaneously do other tasks and end the recording at any given time provided the application is open.
+
+\item Multi-media Mapping
+\\\\Users may link note objects which are text notes and media notes. A sample note with map annotations is shown in Figure \ref{fig:multimediamapping}.
+
+\begin{figure}[htbp!]
+   \centering   
+   \includegraphics[height=9cm, width=14cm]{MultiMediaMapping.eps}
+   \caption{Sample screenshot of the Multi-media Mapping feature}
+   \label{fig:multimediamapping}
+\end{figure}
+
+\item Note Templates
+\\\\Users may choose from a number of papers and templates. Some of the papers or templates are blank page, yellow pad, index card, Cornell Notes, document, and graphing paper. This is show in Figure \ref{fig:templatesdialog}.
+
+\begin{figure}[htbp!] 
+   \centering         
+   \includegraphics[height=9cm, width=14cm]{TemplatesDialog.eps}  
+   \caption{Templates Dialog}
+   \label{fig:templatesdialog}
+\end{figure}
+
+\item Document Import
+\\\\A user can import a document to a notebook.
+\item Undo and Redo
+\\\\Users may erase the last changes done to the document by reverting it to an older state. Users may also revert the effects of the undo action.
+\end{itemize}
+
+\subsubsection{Review Module}
+\label{sec:reviewmodule}
+
+This module provides the user with the tools that facilitate reviewing such as note-sharing, annotations integration, and visual history.
+
+\begin{itemize}
+\item Integrate Annotations
+\\\\Users can combine their annotations for one note with the annotations of other users for the same note if they're annotating on the same page of the same notebook. A pane for showing different users' annotations is shown in Figure \ref{fig:noteintegration}.
+
+\begin{figure}[htbp!]
+   \centering        
+   \includegraphics[height=9cm, width=14cm]{NoteIntegration.eps}
+   \caption{Sample screenshot of a note having the annotations of three users}
+   \label{fig:noteintegration}
+\end{figure}
+
+\item Display and Hide Annotations
+\\\\Users can display or hide annotations based on the authors of the annotations.
+\item Visual Revision History
+\\\\Users may watch the visual revision history of the document by author. The visual revision history will begin from the first annotation made up to the last. Users may forward, rewind, pause, and stop the visual revision history. This is shown in the left portion of the Notes and Annotations Toolbar which is shown in Figure \ref{fig:noteandannotationtoolspane}.
+\end{itemize}
+
+\subsubsection{Note Sharing Module}
+\label{sec:notesharingmodule}
+
+This module allows users to share on's notebooks or selected notes to other users.
+
+\begin{itemize}
+\item Share Notebooks and Notes
+\\\\Users may share selected notes to other users via Bluetooth or e-mail. An interface design showing notebook selection for sharing is shown in Figure \ref{fig:notesharing}.
+
+\begin{figure}[htbp!]  
+   \centering          
+   \includegraphics[height=8cm, width=14cm]{NoteSharing.eps}
+   \caption{A screenshot of notebook selection for sharing}
+   \label{fig:notesharing}
+\end{figure}
+
+\end{itemize}
+
+\pagebreak
+
+\subsection{Physical Environment and Resources}
+\label{sec:physicalenvironmentandresources}
+This section of the chapter enumerates the necessary minimum hardware and software requirements to execute the system.
+
+Mobile Application: Development
+\begin{itemize}
+\item Operating System: Windows XP (32-bit) or higher, or Mac OS 10.5.8 or later (x86 only)
+\item Processor: Intel Core Duo 1.6 GHz or Higher
+\item Programming Language: Java Programming Language
+\item Integrated Development IDE: Eclipse(any version) and ADT 14.0.0 plug-in for Eclipse
+\item Development Kit: Android SDK 14
+\item RAM: At least 1 GB
+\end{itemize}
+
+Mobile Application: Deployment
+\begin{itemize}
+\item Hardware: Samsung Galaxy Tablet and Motorola Xoom
+\item Operating System: Android OS
+\item Platform: minimum of Android 3.0
+\end{itemize}
